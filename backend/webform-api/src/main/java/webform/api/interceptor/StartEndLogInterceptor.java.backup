@@ -1,0 +1,87 @@
+package webform.api.interceptor;
+
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import webform.api.annotation.IgnoreLogParams;
+
+/**
+ * DIされたメソッド呼び出し前後にログ出力するメソッドインターセプター
+ */
+public class StartEndLogInterceptor implements MethodInterceptor {
+	/** Log */
+	private Log log = LogFactory.getLog(getClass());
+
+	@Context
+	private HttpServletRequest httpServletRequest;
+
+	@Override
+	public Object invoke(MethodInvocation invocation) throws Throwable {
+		if (log.isTraceEnabled()) {
+			log.trace(" start >>>");
+		}
+		Method method = invocation.getMethod();
+    	String className = method.getDeclaringClass().getName();
+		String methodName = method.getName();
+		String invocationMethodName = String.join("#", className, methodName);
+		try {
+			if (log.isInfoEnabled()) {
+				log.info(invocationMethodName + " start >>>");
+			}
+			if (log.isDebugEnabled() && method.isAnnotationPresent(IgnoreLogParams.class)) {
+				try {
+					if (null != invocation.getArguments()) {
+						String arguments = new ObjectMapper().writeValueAsString(invocation.getArguments());
+						log.debug(invocationMethodName + " argument : " + arguments);
+					} else {
+						log.debug(invocationMethodName + " argument : null");
+					}
+				} catch (Throwable t) {
+					// デバックログ出力でエラーが出ても警告のみとする。
+					//（toStringがオーバーライドされているかもしれないので念のためtry-catchする。）
+					log.warn("デバックログ出力でエラー", t);
+				}
+			}
+
+			Object result = invocation.proceed();
+
+			if (log.isDebugEnabled() && method.isAnnotationPresent(IgnoreLogParams.class)) {
+				try {
+					if (null != result) {
+						log.debug(invocationMethodName + " result : " + new ObjectMapper().writeValueAsString(result));
+					} else {
+						log.debug(invocationMethodName + " result : null");
+					}
+				} catch (Throwable t) {
+					// デバックログ出力でエラーが出ても警告のみとする。
+					//（toStringがオーバーライドされているかもしれないので念のためtry-catchする。）
+					log.warn("デバックログ出力でエラー", t);
+				}
+			}
+
+			return result;
+		} catch (Throwable t) {
+			if (log.isDebugEnabled()) {
+				log.warn(invocationMethodName + " catch and throw : ", t);
+			}
+			throw t;
+		} finally {
+			if (log.isInfoEnabled()) {
+				log.info(invocationMethodName + " end >>>");
+			}
+			if (log.isTraceEnabled()) {
+				log.trace("<<< end");
+			}
+		}
+	}
+
+}

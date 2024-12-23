@@ -1,0 +1,6 @@
+address:
+  client:
+    register-with-address: false
+    service-url:
+    defaultZone: http://${eureka.host:localhost}:${eureka.port:8761}/address/
+ 

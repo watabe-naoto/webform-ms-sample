@@ -1,0 +1,77 @@
+package webform.api.interceptor;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response.Status;
+
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import webform.api.exception.ApiException;
+
+
+/**
+ * ステータス500となる例外をステータス400のApiExceptionに入れなおすメソッドインターセプター
+ */
+public class BadRequestInterceptor implements MethodInterceptor {
+
+	/** Log */
+	private Log log = LogFactory.getLog(getClass());
+
+	@Context
+	private HttpServletRequest httpServletRequest;
+
+	@Override
+	public Object invoke(MethodInvocation invocation) throws Throwable {
+		log.debug("BadRequestInterceptor.invoke start >>>");
+		try {
+			log.debug("before MethodInvocation.proceed >>>");
+			Object result = invocation.proceed();
+			log.debug("<<< after MethodInvocation.proceed");
+			return result;
+
+		} catch (ApiException e) {
+			if (Status.BAD_REQUEST.getStatusCode() == e.getResponse().getStatus()) {
+				if (log.isDebugEnabled()) {
+					log.debug("e.getMessage() : " + e.getMessage());
+				}
+				throw e;
+			}
+			Map<String, Object> messageMap = e.getMessageMap();
+			Throwable cause = e.getCause();
+			if (null != cause) {
+				if (log.isDebugEnabled()) {
+					log.debug("e.getMessage() : " + e.getMessage(), cause);
+				}
+				throw new ApiException(Status.BAD_REQUEST, messageMap, cause);
+			} else {
+				if (log.isDebugEnabled())
+					log.debug("e.getMessage() : " + e.getMessage());
+				throw new ApiException(Status.BAD_REQUEST, messageMap);
+			}
+
+		} catch (WebApplicationException e) {
+			// 意図的にWebApplicationExceptionをthrowしている場合は、加工せずに返却する。
+			if (log.isDebugEnabled()) {
+				log.debug("e.getMessage() : " + e.getMessage());
+			}
+			throw e;
+
+		} catch (Throwable t) {
+			log.error("BadRequestInterceptorでApiExceptionでない例外をキャッチしました。", t);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("title", "システムエラー");
+			map.put("message", "申し訳ございません。本システムはメンテナンスが必要です。メンテナンス完了まで今暫くのご猶予お願い致します。");
+
+			throw new ApiException(Status.BAD_REQUEST, map, t);
+		} finally {
+			log.debug("<<< BadRequestInterceptor.invoke end");
+		}
+	}
+}

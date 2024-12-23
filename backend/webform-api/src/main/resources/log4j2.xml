@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="off">
+	<Properties>
+    	<Property name="debugLoglayout">%d{yyyy-MM-dd HH:mm:ss.SSS}, [%-5p], %c#%M, %m (%F:%L) in %t%n</Property>
+    	<Property name="StartEndLogLayout">%d{yyyy-MM-dd HH:mm:ss.SSS}, [%-5p], %m in %t%n</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${debugLoglayout}"/>
+		</Console>
+		<Console name="StartEndLogConsole" target="SYSTEM_OUT">
+			<PatternLayout pattern="${StartEndLogLayout}"/>
+		</Console>
+	</Appenders>
+
+	<!-- すべてのログをinfo -->
+	<Loggers>
+		<Logger name="webform.api" level="debug" additivity="false">
+			<AppenderRef ref="Console"/>
+		</Logger>
+		<Logger name="webform.api.interceptor" level="INFO" additivity="false">
+			<AppenderRef ref="StartEndLogConsole"/>
+		</Logger>
+		<Root level="debug">
+			<AppenderRef ref="Console" level="INFO"/>
+		</Root>
+	</Loggers>
+</Configuration>

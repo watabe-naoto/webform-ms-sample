@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package webform.ms.grpc;
+
+option java_multiple_files = true;
+option java_package = "webform.ms.grpc.text_file_writer";
+option java_outer_classname = "TextFileWriterProto";
+
+service TextFileWriter {
+  // Server streaming RPC (単一リクエスト, 単一レスポンス)
+  rpc WriteFileServerStreaming (WriteFileRequest) returns (WriteFileReply) {}
+
+  // Server streaming RPC (単一リクエスト, 単一レスポンス)
+  rpc WriteEncryptionFileServerStreaming (WriteEncryptionFileRequest) returns (WriteEncryptionFileReply) {}
+}
+
+// テキストファイル情報
+message TextFileInfo {
+  string filePath = 1;
+  string backupFilePath = 2;
+  string fileName = 3;
+  string charsetName = 4;
+  string text = 5;
+
+}
+
+// テキストファイル書込みのリクエスト
+message WriteFileRequest {
+  repeated TextFileInfo textFileInfo = 1;
+
+}
+
+// テキストファイル書込みのレスポンス
+message WriteFileReply {
+  string resultCode = 1;
+
+}
+
+// テキストファイル情報（暗号化有無指定あり）
+message EncryptTextFileInfo {
+  string filePath = 1;
+  string backupFilePath = 2;
+  string fileName = 3;
+  string charsetName = 4;
+  string text = 5;
+  string encryptionCommandName = 6;
+
+}
+
+// テキストファイル書込み（暗号化有無指定あり）のリクエスト
+message WriteEncryptionFileRequest {
+  repeated EncryptTextFileInfo textFileInfo = 1;
+}
+
+// テキストファイル書込み（暗号化有無指定あり）のレスポンス
+message WriteEncryptionFileReply {
+  string resultCode = 1;
+
+}

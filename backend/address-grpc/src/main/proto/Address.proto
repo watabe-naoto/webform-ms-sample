@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package webform.ms.grpc;
+
+option java_multiple_files = true;
+option java_package = "webform.ms.grpc.address";
+option java_outer_classname = "AddressProto";
+
+import "google/protobuf/timestamp.proto";
+
+service Address {
+  // Server streaming RPC (単一リクエスト, 複数レスポンス)
+  rpc GetAddress4PostCodeServerStreaming (Address4PostCodeRequest) returns (stream Address4PostCodeReply) {}
+}
+
+// 郵便番号検索のリクエスト
+message Address4PostCodeRequest {
+  string zipCode = 1;
+}
+
+// 郵便番号検索結果の住所情報のレスポンス
+message Address4PostCodeReply {
+  int32 id = 1;
+  string todohukenCode = 2;
+  string shikugunchosonCode = 3;
+  string ohazatsushoCode = 4;
+  string azachomeCode = 5;
+  string kyuZipcd = 6;
+  string todohukenName = 7;
+  string shikugunchosonName = 8;
+  string ohazatsushoName = 9;
+  string azachomeName = 10;
+  google.protobuf.Timestamp insertDatetime = 11;
+  string createUserId = 12;
+
+}

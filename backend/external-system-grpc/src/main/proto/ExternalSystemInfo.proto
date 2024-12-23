@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package webform.ms.grpc;
+
+option java_multiple_files = true;
+option java_package = "webform.ms.grpc.external_system";
+option java_outer_classname = "ExternalSystemInfoProto";
+
+import "google/protobuf/timestamp.proto";
+
+service ExternalSystemInfo {
+  // Server streaming RPC (単一リクエスト, 複数レスポンス)
+  rpc GetExternalSystemInfo4ExternalSystemIdServerStreaming (ExternalSystemInfo4ExternalSystemIdRequest) returns (stream ExternalSystemInfo4ExternalSystemIdReply) {}
+}
+
+// 郵便番号検索のリクエスト
+message ExternalSystemInfo4ExternalSystemIdRequest {
+  repeated int32 externalSystemIds = 1;
+}
+
+// 郵便番号検索結果の住所情報のレスポンス
+message ExternalSystemInfo4ExternalSystemIdReply {
+  int32 id = 1;
+  int32 external_system_id = 2;
+  string external_system_name = 3;
+  int32 external_system_status = 4;
+  google.protobuf.Timestamp update_datetime = 5;
+  string update_user = 6;
+  google.protobuf.Timestamp stop_datetime = 7;
+  google.protobuf.Timestamp reboot_datetime = 8;
+  string message = 9;
+
+}

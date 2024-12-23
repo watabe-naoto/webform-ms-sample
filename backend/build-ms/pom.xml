@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.6</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>webform-ms</groupId>
+	<artifactId>build-ms</artifactId>
+	<version>1.0.0-webform-ms</version>
+	<packaging>pom</packaging>
+	<name>build-ms</name>
+
+	<properties>
+		<java.version>21</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<deployDirectory>${basedir}\target</deployDirectory>
+		<grpc.version>1.68.2</grpc.version>
+	</properties>
+
+	<dependencies>
+		<!-- Spring Data JDBC Libs -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jdbc</artifactId>
+		</dependency>
+	</dependencies>
+
+	<modules>
+		<module>../address-grpc</module>
+		<module>../external-system-grpc</module>
+		<module>../text-file-writer-grpc</module>
+
+		<module>../address-ms</module>
+		<module>../external-system-ms</module>
+		<module>../text-file-writer-ms</module>
+	</modules>
+
+</project>

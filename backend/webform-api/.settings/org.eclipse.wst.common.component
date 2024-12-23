@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+                
+    
+    
+    <wb-module deploy-name="webform-api">
+                                
+        
+        
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+                                
+        
+        
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                                
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                                
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="address-grpc-1.0.0-webform-ms.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/address-grpc/address-grpc">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="external-system-grpc-1.0.0-webform-ms.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/external-system-grpc/external-system-grpc">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="text-file-writer-grpc-1.0.0-webform-ms.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/text-file-writer-grpc/text-file-writer-grpc">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+                                
+        
+        
+        <property name="context-root" value="webform-api"/>
+                                
+        
+        
+        <property name="java-output-path" value="/webform-api/target/classes"/>
+                            
+    
+    
+    </wb-module>
+            
+
+
+</project-modules>

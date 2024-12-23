@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package webform.ms.grpc;
+
+option java_multiple_files = true;
+option java_package = "webform.ms.grpc.external_system";
+option java_outer_classname = "ExternalSystemRelationInfoProto";
+
+import "google/protobuf/timestamp.proto";
+
+service ExternalSystemRelationInfo {
+  // Server streaming RPC (単一リクエスト, 複数レスポンス)
+  rpc GetExternalSystemInfo4ExternalSystemIdServerStreaming (ExternalSystemRelationInfo4ExternalSystemIdRequest) returns (stream ExternalSystemRelationInfo4ExternalSystemIdReply) {}
+}
+
+// 郵便番号検索のリクエスト
+message ExternalSystemRelationInfo4ExternalSystemIdRequest {
+  string orderformType = 1;
+}
+
+// 郵便番号検索結果の住所情報のレスポンス
+message ExternalSystemRelationInfo4ExternalSystemIdReply {
+  int32 id = 1;
+  string orderform_type = 2;
+  int32 external_system_id = 3;
+  string add_user = 4;
+  google.protobuf.Timestamp add_date = 5;
+
+}

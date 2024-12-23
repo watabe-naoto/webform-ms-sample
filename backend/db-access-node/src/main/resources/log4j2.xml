@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Properties>
+		<Property name="loglayout">[%d{yyyy-MM-dd HH:mm:ss.SSS}], %-5p, %t,[%X{customerId}] , %c,%m%n%ex</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${loglayout}" />
+		</Console>
+		<RollingFile name="rolling" fileName="logs/textFileWriter.log"
+			filePattern="logs/textFileWriter-%d{yyyy-MM-dd}-%i.zip">
+			<PatternLayout pattern="${loglayout}" />
+			<Policies>
+				<!-- <OnStartupTriggeringPolicy /> -->
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="100" />
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="rolling" />
+		</Root>
+	</Loggers>
+</Configuration>
