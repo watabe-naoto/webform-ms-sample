@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -21,7 +21,7 @@ import webform.ms.grpc.external_system.ExternalSystemRelationInfoGrpc.ExternalSy
  */
 public class ExternalsystemrelationinfoService {
 	/** Log */
-	private static final Log log = LogFactory.getLog(ExternalsystemrelationinfoService.class);
+	private final Logger logger = LogManager.getLogger(ExternalsystemrelationinfoService.class);
 
 	/**
 	 * コンストラクタ
@@ -39,7 +39,7 @@ public class ExternalsystemrelationinfoService {
 	 * @return 外部システムステータス（0：停止、1：起動） 該当データ無しなら-1
 	 */
 	public int[] selectSystemId(String orderformType) {
-		log.info("ExternalsystemrelationinfoService.selectSystemId Start.");
+		logger.info("ExternalsystemrelationinfoService.selectSystemId Start.");
 
 		// 検索条件設定
 		// WHERE orderform_type = :orderformType

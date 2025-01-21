@@ -10,6 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.process.internal.RequestScoped;
 
 import webform.api.dto.address.SearchAddressDto;
@@ -18,6 +20,8 @@ import webform.api.service.address.AddressService;
 @RequestScoped
 @Path("address")
 public class AddressResource {
+
+	private final Logger logger = LogManager.getLogger(AddressResource.class);
 	
 	@Inject
 	private AddressService addressService;
@@ -26,13 +30,13 @@ public class AddressResource {
 	@GET
 	@Path("4PostCode")
 	public Map<String, List<SearchAddressDto> > getAddress4PostCode(@QueryParam("zipCode") String zipCode) {
-		System.out.println("call getAddress4PostCode zipCode=" + zipCode);
+		logger.info("call getAddress4PostCode zipCode=" + zipCode);
 
 //		AddressService addressService =new AddressService();
 
 		Map<String, List<SearchAddressDto> > res = this.addressService.serch(zipCode);
 
-		System.out.println("getAddress4PostCode end");
+		logger.info("getAddress4PostCode end");
 		return res;
 	}
 

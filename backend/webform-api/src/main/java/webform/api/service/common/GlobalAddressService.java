@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * グローバルIPアドレス取得サービスクラス.
@@ -27,7 +27,7 @@ public class GlobalAddressService {
 	private static String IP4_CIDR_REGEX = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(/([0-9]|[1-2][0-9]|3[0-2]))$";
 
 	/** Log */
-	private Log log = LogFactory.getLog(getClass());
+	private final Logger logger = LogManager.getLogger(GlobalAddressService.class);
 
 	/**
 	 * グローバルIPアドレス取得.
@@ -35,7 +35,7 @@ public class GlobalAddressService {
 	 * @return IPアドレス
 	 */
 	public String getIPaddress() {
-		log.info("★GlobalAddressService Start.");
+		logger.info("★GlobalAddressService Start.");
 		try {
 			String ipAddress = "";
 			String targetIp = null;
@@ -52,12 +52,12 @@ public class GlobalAddressService {
 			if (targetIp != null) {
 				ipAddress = targetIp;
 			} else {
-				log.info("xForwardedFor not found.");
+				logger.info("xForwardedFor not found.");
 				ipAddress = request.getRemoteAddr();
 			}
 			return ipAddress;
 		} finally {
-			log.info("★GlobalAddressResource end.");
+			logger.info("★GlobalAddressResource end.");
 		}
 	}
 

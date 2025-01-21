@@ -6,8 +6,8 @@ import java.util.Calendar;
 import java.util.StringJoiner;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import webform.api.constant.business_address.BusinessAddressConstant;
 import webform.api.constant.common.CommonConstant;
@@ -26,7 +26,7 @@ import webform.api.service.common.CountService;
  */
 public class BusinessAddressService {
 	/** Log */
-	private static final Log log = LogFactory.getLog(BusinessAddressService.class);
+	private final Logger logger = LogManager.getLogger(BusinessAddressService.class);
 
 	/** 請求書送付先変更のマッチカウント。 */
 	private String matchCount = null;
@@ -47,28 +47,28 @@ public class BusinessAddressService {
 			// 請求書送付先変更のお申し込み受付のマッチカウント取得。
 			String matchCountFile = EnvironmentSettingProperties.getEnvProp(
 					MatchCountConstant.PROP_MATCH_COUNT_BUSINESS_ADDRESS_EDIT_FILE_PATH) + matchCountFileName + ".dat";
-			log.info("BusinessAddressService.BusinessAddressService() matchCountFile=" + matchCountFile);
+			logger.info("BusinessAddressService.BusinessAddressService() matchCountFile=" + matchCountFile);
 			CountService matchCountService = new CountService(matchCountFile);
 			this.matchCount = matchCountService.createCount("", 6);
 
 			// 請求書送付先変更のお申し込み受付のマッチメールカウント取得。
 			String matchMailCountFile = EnvironmentSettingProperties.getEnvProp(MatchMailConstant.PROP_MATCH_MAIL_FILE_PATH)
 					+ MatchCountConstant.MATCH_MAIL_FILE_NAME;
-			log.info("BusinessAddressService.BusinessAddressService() matchMailCountFile=" + matchMailCountFile);
+			logger.info("BusinessAddressService.BusinessAddressService() matchMailCountFile=" + matchMailCountFile);
 			CountService matchMailCountService = new CountService(matchMailCountFile);
 			this.matchMailCount = matchMailCountService.createCount("", 6);
 
 			// 請求書送付先変更のお申し込み受付のサンキューメール用の申込連番取得。
 			String thanksCountFile = EnvironmentSettingProperties.getEnvProp(ThanksMailConstant.PROP_THANKS_OUTPUT_PATH)
 					+ ThanksMailConstant.THANKS_FILE_NAME;
-			log.info("BusinessAddressService.BusinessAddressService() thanksCountFile=" + thanksCountFile);
+			logger.info("BusinessAddressService.BusinessAddressService() thanksCountFile=" + thanksCountFile);
 			CountService thanksMailCountService = new CountService(thanksCountFile);
 			this.thanksMailCount = thanksMailCountService.createCount("", 6);
 
 			rightNow = Calendar.getInstance();
 
 		} catch (IOException e) {
-			log.error("申込情報ファイル作成：リクエストでホスト名の取得に失敗しました。: ", e);
+			logger.error("申込情報ファイル作成：リクエストでホスト名の取得に失敗しました。: ", e);
 			throw new AppException(CommonConstant.SYSTEM_ERROR,
 					new String[] { BusinessAddressConstant.CONNECTION_SYSTEM_NAME });
 		}
@@ -87,7 +87,7 @@ public class BusinessAddressService {
 		sb.append(new SimpleDateFormat("yyyyMMdd").format(rightNow.getTime()));
 		sb.append("-48.csv");
 
-		log.info("FtpCsvFileName=" + sb.toString());
+		logger.info("FtpCsvFileName=" + sb.toString());
 		return sb.toString();
 	}
 
@@ -184,7 +184,7 @@ public class BusinessAddressService {
 			.add(StringUtils.EMPTY).add(StringUtils.EMPTY).add("【B】請求書送付先変更申込受付");
 
 		String ret = sj.toString();
-		log.debug("FtpCsv: " + ret);
+		logger.debug("FtpCsv: " + ret);
 
 		return ret;
 	}
@@ -207,7 +207,7 @@ public class BusinessAddressService {
 		sb.append(hour / 3 + 1);
 		sb.append(".csv"); // 固定値:".csv"
 
-		log.info("thanksmMailCsvFileName=" + sb.toString());
+		logger.info("thanksmMailCsvFileName=" + sb.toString());
 		return sb.toString();
 	}
 
@@ -233,7 +233,7 @@ public class BusinessAddressService {
 			.add("請求書送付先変更申込受付完了");
 
 		String ret = sj.toString();
-		log.debug("ThanksmMailCsv:" + ret);
+		logger.debug("ThanksmMailCsv:" + ret);
 
 		return ret;
 	}
@@ -252,7 +252,7 @@ public class BusinessAddressService {
 		// 固定値:"_business_address_edit_match_count.csv"
 		sb.append("_" + matchCountFileName + ".csv");
 
-		log.info("matchCountCsvFileName=" + sb.toString());
+		logger.info("matchCountCsvFileName=" + sb.toString());
 		return sb.toString();
 	}
 
@@ -272,7 +272,7 @@ public class BusinessAddressService {
 			.add("【B】請求書送付先変更申込受付");
 
 		String ret = sj.toString();
-		log.debug("MatchCountCsv: " + ret);
+		logger.debug("MatchCountCsv: " + ret);
 
 		return ret;
 	}
@@ -291,7 +291,7 @@ public class BusinessAddressService {
 		sb.append(new SimpleDateFormat("yyyyMMdd").format(rightNow.getTime())); // 申込日("YYYYMMDD"形式)
 		sb.append("-" + String.format("%02d", n) + ".csv");
 
-		log.info("matchMailCsvFileName=" + sb.toString());
+		logger.info("matchMailCsvFileName=" + sb.toString());
 		return sb.toString();
 	}
 
@@ -344,7 +344,7 @@ public class BusinessAddressService {
 			.add("【B】請求書送付先変更申込受付");
 
 		String ret = sj.toString();
-		log.debug("MatchMailCsv: " + ret);
+		logger.debug("MatchMailCsv: " + ret);
 
 		return ret;
 	}
@@ -385,7 +385,7 @@ public class BusinessAddressService {
 			.add(appendValue("ご連絡先電話番号", entity.getTel()));
 
 		String ret = sj.toString();
-		log.debug(ret);
+		logger.debug(ret);
 
 		return ret;
 	}

@@ -21,6 +21,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<deployDirectory>${basedir}\target</deployDirectory>
 		<grpc.version>1.68.2</grpc.version>
 	</properties>

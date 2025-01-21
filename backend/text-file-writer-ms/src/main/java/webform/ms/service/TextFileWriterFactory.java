@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import webform.ms.constant.CommonConstant;
 import webform.ms.constant.TextFileWriterConstant;
@@ -32,7 +32,7 @@ import webform.ms.grpc.text_file_writer.WriteFileRequest;
  */
 class TextFileWriterFactory {
 	/** ロガー. */
-	private static final Logger logger = LogManager.getLogger(TextFileWriterFactory.class);
+	private final Logger logger = LoggerFactory.getLogger(TextFileWriterFactory.class);
 
 	/** プロパティ. */
 	private static final ResourceBundle RB = ResourceBundle.getBundle(TextFileWriterConstant.TEXT_FILE_WRITER_PROPERTIES_FILE);

@@ -8,8 +8,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import webform.api.constant.business_address.BusinessAddressConstant;
 import webform.api.constant.prop.MatchCountConstant;
@@ -26,7 +26,7 @@ import webform.api.service.text_file_writer.TextFileWriterService;
 @Path("business_address")
 public class BusinessAddressResource {
 	/** Log */
-	private static final Log log = LogFactory.getLog(BusinessAddressResource.class);
+	private final Logger logger = LogManager.getLogger(BusinessAddressResource.class);
 
 	//@Inject
 	//private BusinessAddressService service;
@@ -48,7 +48,7 @@ public class BusinessAddressResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public WriteEncryptionFileResponseDto order(@Context HttpHeaders headers, BusinessAddressEditEntity entity) {
-		log.info("BusinessAddressResource#order Start");
+		logger.info("BusinessAddressResource#order Start");
 		// パラメタチェック
 // パラメータチェックはアノテーション実装しない処理に変更が必要
 //		BeanValidateUtil.validateBean(entity);
@@ -60,7 +60,7 @@ public class BusinessAddressResource {
 		this.writeMatch(entity, service);
 		// サンキューメール出力
 		WriteEncryptionFileResponseDto res = this.writeThankYou(entity, service);
-		log.info("BusinessAddressResource#order End");
+		logger.info("BusinessAddressResource#order End");
 		return res;
 	}
 
@@ -75,7 +75,7 @@ public class BusinessAddressResource {
 	private WriteEncryptionFileResponseDto writeFtp(BusinessAddressEditEntity entity, BusinessAddressService service) {
 		String filePath = new String(
 				EnvironmentSettingProperties.getEnvProp(BusinessAddressConstant.PROP_FTP_FILE_PATH));
-		log.info("filePath：" + filePath);
+		logger.info("filePath：" + filePath);
 
 		WriteEncryptionFileRequestDto req = new WriteEncryptionFileRequestDto();
 
@@ -103,7 +103,7 @@ public class BusinessAddressResource {
 		String filePath = new String(
 				EnvironmentSettingProperties
 						.getEnvProp(MatchCountConstant.PROP_MATCH_COUNT_BUSINESS_ADDRESS_EDIT_FILE_PATH));
-		log.info("filePath：" + filePath);
+		logger.info("filePath：" + filePath);
 
 		WriteEncryptionFileRequestDto req = new WriteEncryptionFileRequestDto();
 
@@ -140,7 +140,7 @@ public class BusinessAddressResource {
 			BusinessAddressService service) {
 		String filePath = new String(
 				EnvironmentSettingProperties.getEnvProp(ThanksMailConstant.PROP_THANKS_OUTPUT_PATH));
-		log.info("filePath：" + filePath);
+		logger.info("filePath：" + filePath);
 
 		WriteEncryptionFileRequestDto req = new WriteEncryptionFileRequestDto();
 

@@ -20,8 +20,8 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import webform.ms.constant.CommonConstant;
 import webform.ms.constant.TextFileWriterConstant;
@@ -33,7 +33,7 @@ import webform.ms.exception.AppException;
  */
 public class TextFileService {
 	/** ロガー */
-	private static final Logger logger = LogManager.getLogger(TextFileService.class);
+	private final Logger logger = LoggerFactory.getLogger(TextFileService.class);
 
 	/** プロパティ */
 	private static final ResourceBundle RB = ResourceBundle.getBundle(TextFileWriterConstant.TEXT_FILE_WRITER_PROPERTIES_FILE);

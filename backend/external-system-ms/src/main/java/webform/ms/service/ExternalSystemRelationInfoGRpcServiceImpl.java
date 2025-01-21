@@ -4,6 +4,8 @@ import java.time.ZoneId;
 import java.util.List;
 
 import org.lognet.springboot.grpc.GRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.protobuf.Timestamp;
@@ -18,12 +20,14 @@ import webform.ms.grpc.external_system.ExternalSystemRelationInfoGrpc;
 @GRpcService
 public class ExternalSystemRelationInfoGRpcServiceImpl extends ExternalSystemRelationInfoGrpc.ExternalSystemRelationInfoImplBase {
 
+	private final Logger logger = LoggerFactory.getLogger(ExternalSystemRelationInfoGRpcServiceImpl.class);
+
 	@Autowired
 	private ExternalSystemRelationInfoRepository repository;
 
 	@Override
 	public void getExternalSystemInfo4ExternalSystemIdServerStreaming(ExternalSystemRelationInfo4ExternalSystemIdRequest request, StreamObserver<ExternalSystemRelationInfo4ExternalSystemIdReply> responseObserver) {
-		System.out.println("orderformType=[" + request.getOrderformType() + "]");
+		logger.info("orderformType=[" + request.getOrderformType() + "]");
 
 		List<ExternalSystemRelationInfo> externalSystemRelationInfoList = repository.getExternalSystemRelationInfoByOrderformTypeEquals(request.getOrderformType());
 		

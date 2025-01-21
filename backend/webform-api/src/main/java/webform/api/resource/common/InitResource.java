@@ -14,8 +14,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.process.internal.RequestScoped;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +38,7 @@ import webform.api.util.SecureUtil;
 @Path("init")
 public class InitResource {
 	/** Log */
-	private Log log = LogFactory.getLog(getClass());
+	private final Logger logger = LogManager.getLogger(InitResource.class);
 
 	private static final String ORDER_TYPE = "order_type";
 
@@ -91,7 +91,7 @@ public class InitResource {
 
 		// メンテナンス中に利用可能なクライアントGIPを判定する。
 		String gip = this.globalAddressService.getIPaddress();
-		log.info("クライアントGIP=" + gip);
+		logger.info("クライアントGIP=" + gip);
 		if (!this.availableIpListService.isAvailableIp(gip)) {
 			// メンテナンス中に利用不可のクライアントGIPなので、メンテナンス中判定を行う。
 			// 外部システム利用可能判定
@@ -116,7 +116,7 @@ public class InitResource {
 //			resDto.setBillingExtensionMessage(billingExtensionMessageList);
 //		}
 
-		log.info("InitialResource#initProc End.");
+		logger.info("InitialResource#initProc End.");
 		return resDto;
 
 		//		InitialDto dto = new InitialDto();
@@ -145,7 +145,7 @@ public class InitResource {
 	 * @param conduct
 	 */
 	private void checkParam(String conduct) {
-		log.info("InitialResource#checkParam Start.");
+		logger.info("InitialResource#checkParam Start.");
 		// パラメータチェック
 		if (ConductCodeConstant.CONDUCT.get(conduct) == null) {
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -154,7 +154,7 @@ public class InitResource {
 			map.put("message", "conductが取得出来ません。conduct=" + conduct);
 			throw new ApiException(map);
 		}
-		log.info("InitialResource#checkParam End.");
+		logger.info("InitialResource#checkParam End.");
 	}
 
 	/**
@@ -162,20 +162,20 @@ public class InitResource {
 	 * @return
 	 */
 	private HashMap<String, Object> pickGateParams() {
-		log.info("InitialResource#pickGateParams Start.");
+		logger.info("InitialResource#pickGateParams Start.");
 		HttpSession primerSession = this.httpServletRequest.getSession();
 		@SuppressWarnings("unchecked")
 		HashMap<String, Object> stackParams = (HashMap<String, Object>) primerSession
 				.getAttribute(SessionKeyConstant.SESSION_STACK_PARAMS_KEY);
-		if (log.isDebugEnabled()) {
+		if (logger.isDebugEnabled()) {
 			try {
-				log.debug(
+				logger.debug(
 						"GateResourceでセッションにセットした入力パラメータの内容確認 : " + new ObjectMapper().writeValueAsString(stackParams));
 			} catch (Exception e) {
-				log.debug(e);
+				logger.debug("", e);
 			}
 		}
-		log.info("InitialResource#pickGateParams End.");
+		logger.info("InitialResource#pickGateParams End.");
 		return stackParams;
 	}
 
@@ -184,7 +184,7 @@ public class InitResource {
 	 * @return
 	 */
 	private HttpSession resessions() {
-		log.info("InitialResource#resessions Start.");
+		logger.info("InitialResource#resessions Start.");
 		// セッションを破棄する
 		this.httpServletRequest.getSession().invalidate();
 
@@ -201,7 +201,7 @@ public class InitResource {
 				StringUtils.length(orderTypeAccessDateTime));
 		session.setAttribute(SessionKeyConstant.SESSION_ACCESS_DATE_TIME, accessDateTime);
 
-		log.info("InitialResource#resessions End.");
+		logger.info("InitialResource#resessions End.");
 		return session;
 	}
 
@@ -212,13 +212,13 @@ public class InitResource {
 	 * @return Token文字列(URL-safe)
 	 */
 	private String generateToken() {
-		log.info("InitialResource#generateToken Start.");
+		logger.info("InitialResource#generateToken Start.");
 
 		String token = SecureUtil.getRandomToken();
 		this.httpServletRequest.getSession().setAttribute(SessionKeyConstant.SESSION_TOKEN_KEY, token);
 		String UrlSafeFormatToken = TokenService.createToken(token);
 
-		log.info("InitialResource#generateToken End.");
+		logger.info("InitialResource#generateToken End.");
 		return UrlSafeFormatToken;
 	}
 
@@ -229,7 +229,7 @@ public class InitResource {
 	 *            導線
 	 */
 	private CheckAvailableRes checkAvailable(String conduct) {
-		log.info("InitialResource#checkAvailable Start.");
+		logger.info("InitialResource#checkAvailable Start.");
 
 		// 導線に応じたシステムIDの設定
 		int[] systemIds = relService.selectSystemId(ConductCodeConstant.CONDUCT.get(conduct).getValue());
@@ -244,7 +244,7 @@ public class InitResource {
 		res.result = StringUtils.isEmpty(message);
 		res.message = message;
 
-		log.info("InitialResource#checkAvailable End.");
+		logger.info("InitialResource#checkAvailable End.");
 		return res;
 	}
 
@@ -255,11 +255,11 @@ public class InitResource {
 	 * @return 取得情報
 	 */
 	private Map<String, String> getBillingExtensionMessage() {
-		log.info("InitialResource#getBillingExtensionMessage Start.");
+		logger.info("InitialResource#getBillingExtensionMessage Start.");
 		// 検索実行
 		BillingExtensionMessageService service = new BillingExtensionMessageService();
 
-		log.info("InitialResource#getBillingExtensionMessage End.");
+		logger.info("InitialResource#getBillingExtensionMessage End.");
 		return service.getBillingExtensionMessage();
 	}
 

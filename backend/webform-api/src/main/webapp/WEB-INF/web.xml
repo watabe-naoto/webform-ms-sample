@@ -58,7 +58,7 @@
 	</servlet>
 	<servlet>
 		<servlet-name>Initialize Servlet</servlet-name>
-		<servlet-class>reqform.api.servlet.InitializeServlet</servlet-class>
+		<servlet-class>webform.api.servlet.InitializeServlet</servlet-class>
 		<init-param>
 			<param-name>application-name</param-name>
 			<param-value>Webフォーム API</param-value>

@@ -3,6 +3,8 @@ package webform.ms.service;
 import java.util.List;
 
 import org.lognet.springboot.grpc.GRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.grpc.stub.StreamObserver;
 import webform.ms.grpc.text_file_writer.EncryptTextFileInfo;
@@ -16,21 +18,25 @@ import webform.ms.grpc.text_file_writer.WriteFileRequest;
 @GRpcService
 public class TextFileWriterGRpcServiceImpl extends TextFileWriterGrpc.TextFileWriterImplBase {
 
-//	@Autowired
+	private final Logger logger = LoggerFactory.getLogger(TextFileWriterFactory.class);
+
+	//	@Autowired
 //	private AddressRepository repository;
 
 	@Override
 	public void writeFileServerStreaming(WriteFileRequest request, StreamObserver<WriteFileReply> responseObserver) {
 		List<TextFileInfo> textFileInfoList = request.getTextFileInfoList();
-		int count = 0;
-		for(TextFileInfo textFileInfo : textFileInfoList) {
-			System.out.println("textFileInfo[" + count + "]");
-			System.out.println("  filePath=[" + textFileInfo.getFilePath() + "]");
-			System.out.println("  backupFilePath=[" + textFileInfo.getBackupFilePath() + "]");
-			System.out.println("  fileName=[" + textFileInfo.getFileName() + "]");
-			System.out.println("  charsetName=[" + textFileInfo.getCharsetName() + "]");
-			System.out.println("  text=[" + textFileInfo.getText() + "]");
-			count++;
+		if(logger.isDebugEnabled()) {
+			int count = 0;
+			for(TextFileInfo textFileInfo : textFileInfoList) {
+				logger.debug("textFileInfo[" + count + "]");
+				logger.debug("  filePath=[" + textFileInfo.getFilePath() + "]");
+				logger.debug("  backupFilePath=[" + textFileInfo.getBackupFilePath() + "]");
+				logger.debug("  fileName=[" + textFileInfo.getFileName() + "]");
+				logger.debug("  charsetName=[" + textFileInfo.getCharsetName() + "]");
+				logger.debug("  text=[" + textFileInfo.getText() + "]");
+				count++;
+			}
 		}
 
 		// factory呼び出し
@@ -44,16 +50,18 @@ public class TextFileWriterGRpcServiceImpl extends TextFileWriterGrpc.TextFileWr
 	@Override
 	public void writeEncryptionFileServerStreaming(WriteEncryptionFileRequest request, StreamObserver<WriteEncryptionFileReply> responseObserver) {
 		List<EncryptTextFileInfo> encryptTextFileInfoList = request.getTextFileInfoList();
-		int count = 0;
-		for(EncryptTextFileInfo encryptTextFileInfo : encryptTextFileInfoList) {
-			System.out.println("encryptTextFileInfo[" + count + "]");
-			System.out.println("  filePath=[" + encryptTextFileInfo.getFilePath() + "]");
-			System.out.println("  backupFilePath=[" + encryptTextFileInfo.getBackupFilePath() + "]");
-			System.out.println("  fileName=[" + encryptTextFileInfo.getFileName() + "]");
-			System.out.println("  charsetName=[" + encryptTextFileInfo.getCharsetName() + "]");
-			System.out.println("  text=[" + encryptTextFileInfo.getText() + "]");
-			System.out.println("  encryptionCommandName=[" + encryptTextFileInfo.getEncryptionCommandName() + "]");
-			count++;
+		if(logger.isDebugEnabled()) {
+			int count = 0;
+			for(EncryptTextFileInfo encryptTextFileInfo : encryptTextFileInfoList) {
+				logger.debug("encryptTextFileInfo[" + count + "]");
+				logger.debug("  filePath=[" + encryptTextFileInfo.getFilePath() + "]");
+				logger.debug("  backupFilePath=[" + encryptTextFileInfo.getBackupFilePath() + "]");
+				logger.debug("  fileName=[" + encryptTextFileInfo.getFileName() + "]");
+				logger.debug("  charsetName=[" + encryptTextFileInfo.getCharsetName() + "]");
+				logger.debug("  text=[" + encryptTextFileInfo.getText() + "]");
+				logger.debug("  encryptionCommandName=[" + encryptTextFileInfo.getEncryptionCommandName() + "]");
+				count++;
+			}
 		}
 		
 		// factory呼び出し

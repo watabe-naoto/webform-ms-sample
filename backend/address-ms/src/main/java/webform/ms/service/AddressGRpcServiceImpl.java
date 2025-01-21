@@ -4,6 +4,8 @@ import java.time.ZoneId;
 import java.util.List;
 
 import org.lognet.springboot.grpc.GRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.protobuf.Timestamp;
@@ -18,12 +20,14 @@ import webform.ms.grpc.address.AddressGrpc;
 @GRpcService
 public class AddressGRpcServiceImpl extends AddressGrpc.AddressImplBase {
 
+	private final Logger logger = LoggerFactory.getLogger(AddressGRpcServiceImpl.class);
+
 	@Autowired
 	private AddressRepository repository;
 
 	@Override
 	public void getAddress4PostCodeServerStreaming(Address4PostCodeRequest request, StreamObserver<Address4PostCodeReply> responseObserver) {
-		System.out.println("zipCode=[" + request.getZipCode() + "]");
+		logger.info("zipCode=[" + request.getZipCode() + "]");
 		
 		List<Address> addressList = repository.getAddressByPostCodeEquals(request.getZipCode());
 		

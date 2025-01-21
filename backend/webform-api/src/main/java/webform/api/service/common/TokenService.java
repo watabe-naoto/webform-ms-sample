@@ -12,8 +12,8 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ContainerRequest;
 
 import com.nimbusds.jose.JOSEException;
@@ -34,7 +34,7 @@ import webform.api.util.ResourceUtil;
  */
 public class TokenService {
 	/** Log */
-	private static final Log log = LogFactory.getLog(TokenService.class);
+	private static final Logger logger = LogManager.getLogger(TokenService.class);
 	/** Access Token Label Name */
 	private static final String[] ACCESS_TOKEN_LABEL = { "access-token", "access_token", "accessToken" };
 	/** SUBJECT */
@@ -173,16 +173,16 @@ public class TokenService {
 			if ((null != expireDatetime) && (System.currentTimeMillis() < expireDatetime.getTime())) {
 				final String userId = (String) claimsSet.getClaim(USER_TOKEN_KEY);
 				if (!StringUtils.isEmpty(userId)/* && AuthenticateService.isUserValid(userId)*/) {
-					log.info("UserId:[" + userId + "] accepted.");
+					logger.info("UserId:[" + userId + "] accepted.");
 					return true;
 				}
 			} else {
-				log.debug("token expired.");
+				logger.debug("token expired.");
 			}
 		} else if (null != claimsSet) {
-			log.warn("未知のSubject:" + claimsSet.getSubject());
+			logger.warn("未知のSubject:" + claimsSet.getSubject());
 		} else {
-			log.warn("no claims");
+			logger.warn("no claims");
 		}
 		return false;
 	}
@@ -196,10 +196,10 @@ public class TokenService {
 	public static String getUserToken(final String accessToken) {
 		JWTClaimsSet claimsSet = getClaimsSet(accessToken);
 		if ((null != claimsSet) && SUBJECT.equals(claimsSet.getSubject())) {
-			log.info("match subject.");
+			logger.info("match subject.");
 			return (String) claimsSet.getClaim(USER_TOKEN_KEY);
 		}
-		log.info("subject failed.");
+		logger.info("subject failed.");
 		return null;
 	}
 
@@ -208,7 +208,7 @@ public class TokenService {
 			// ヘッダから取得
 			for (String label : ACCESS_TOKEN_LABEL) {
 				String accessToken = headers.getHeaderString(label);
-				log.info("raw-token header:" + accessToken);
+				logger.info("raw-token header:" + accessToken);
 				if (!StringUtils.isEmpty(accessToken)) {
 					return getUserToken(accessToken);
 				}

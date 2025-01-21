@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Configuration status="off">
 	<Properties>
-    	<Property name="debugLoglayout">%d{yyyy-MM-dd HH:mm:ss.SSS}, [%-5p], %c#%M, %m (%F:%L) in %t%n</Property>
-    	<Property name="StartEndLogLayout">%d{yyyy-MM-dd HH:mm:ss.SSS}, [%-5p], %m in %t%n</Property>
+    	<Property name="debugLoglayout">%d{yyyy-MM-dd HH:mm:ss.SSS}, [%-5p], %x, %c#%M, %m (%F:%L) in %t%n</Property>
+    	<Property name="loglayout">%d{yyyy-MM-dd HH:mm:ss.SSS}, [%-5p], %x, %c#%M, %m in %t%n</Property>
 	</Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="${debugLoglayout}"/>
 		</Console>
-		<Console name="StartEndLogConsole" target="SYSTEM_OUT">
-			<PatternLayout pattern="${StartEndLogLayout}"/>
-		</Console>
+		<RollingFile name="Daily" fileName="${sys:catalina.home}/logs/mypage_api.log" filePattern="logs/mypage_api-%d{yyyy-MM-dd}-%i.zip">
+			<PatternLayout pattern="${debugLoglayout}"/>
+			<Policies>
+            	<OnStartupTriggeringPolicy />
+            	<SizeBasedTriggeringPolicy size="20 MB" />
+            	<TimeBasedTriggeringPolicy />
+        	</Policies>
+        </RollingFile>
 	</Appenders>
 
 	<!-- すべてのログをinfo -->
 	<Loggers>
-		<Logger name="webform.api" level="debug" additivity="false">
+		<Logger name="webform" level="debug" additivity="false">
 			<AppenderRef ref="Console"/>
+ 			<AppenderRef ref="Daily"/>
 		</Logger>
-		<Logger name="webform.api.interceptor" level="INFO" additivity="false">
-			<AppenderRef ref="StartEndLogConsole"/>
-		</Logger>
-		<Root level="debug">
+		<Root level="INFO">
 			<AppenderRef ref="Console" level="INFO"/>
+ 			<AppenderRef ref="Daily" level="INFO"/>
 		</Root>
 	</Loggers>
 </Configuration>

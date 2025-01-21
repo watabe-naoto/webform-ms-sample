@@ -3,8 +3,8 @@ package webform.api.service.text_file_writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -27,7 +27,7 @@ import webform.ms.grpc.text_file_writer.WriteFileRequest;
  */
 public class TextFileWriterService {
 	/** Log */
-	private Log log = LogFactory.getLog(getClass());
+	private final Logger logger = LogManager.getLogger(TextFileWriterService.class);
 
 	public TextFileWriterService() {
 	}
@@ -38,7 +38,7 @@ public class TextFileWriterService {
 	 * @return 結果BEAN
 	 */
 	public WriteFileResponseDto writeFile(WriteFileRequestDto req) {
-		log.debug("textFileInfoList=" + (req.getTextFileInfoList() == null ? null : req.getTextFileInfoList()));
+		logger.debug("textFileInfoList=" + (req.getTextFileInfoList() == null ? null : req.getTextFileInfoList()));
 
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9899).usePlaintext().build();
 
@@ -73,7 +73,7 @@ public class TextFileWriterService {
 	 * @return 結果BEAN
 	 */
 	public WriteEncryptionFileResponseDto writeEncryptionFile(WriteEncryptionFileRequestDto req) {
-		log.debug("textFileInfoList=" + (req.getTextFileInfoList() == null ? null : req.getTextFileInfoList()));
+		logger.debug("textFileInfoList=" + (req.getTextFileInfoList() == null ? null : req.getTextFileInfoList()));
 
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9899).usePlaintext().build();
 

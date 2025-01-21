@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.protobuf.Timestamp;
 
@@ -22,11 +24,13 @@ import webform.ms.grpc.address.AddressGrpc.AddressBlockingStub;
 //@RequestScoped
 public class AddressService implements AddressInterface{
 
+	private final Logger logger = LogManager.getLogger(AddressService.class);
+
 //    @GrpcClient("myService")
 //    private MyServiceBlockingStub myServiceStub;
 
     public Map<String, List<SearchAddressDto> > serch(String zipCode) {
-		System.out.println("call serch zipCode=" + zipCode);
+    	logger.info("call serch zipCode=" + zipCode);
 
 		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9898).usePlaintext().build();
 
@@ -54,19 +58,18 @@ public class AddressService implements AddressInterface{
 			Timestamp insertDatetime = address.getInsertDatetime();
 			String createUserId = address.getCreateUserId();
 
-			System.out.println("address[" + count + "]" );
-			System.out.println("  id=[" + id + "]");
-			System.out.println("  todohukenCode=[" + todohukenCode + "]");
-			System.out.println("  shikugunchosonCode=[" + shikugunchosonCode + "]");
-			System.out.println("  ohazatsushoCode=[" + ohazatsushoCode + "]");
-			System.out.println("  azachomeCode=[" + azachomeCode + "]");
-			System.out.println("  kyuZipcd=[" + kyuZipcd + "]");
-			System.out.println("  todohukenName=[" + todohukenName + "]");
-			System.out.println("  shikugunchosonName=[" + shikugunchosonName + "]");
-			System.out.println("  ohazatsushoName=[" + ohazatsushoName + "]");
-			System.out.println("  azachomeName=[" + azachomeName + "]");
-			System.out.println("  insertDatetime=[" + insertDatetime + "]");
-			System.out.println("  createUserId=[" + createUserId + "]");
+			logger.debug("address[" + count + "]" );
+			logger.debug("  id=[" + id + "]");
+			logger.debug("  shikugunchosonCode=[" + shikugunchosonCode + "]");
+			logger.debug("  ohazatsushoCode=[" + ohazatsushoCode + "]");
+			logger.debug("  azachomeCode=[" + azachomeCode + "]");
+			logger.debug("  kyuZipcd=[" + kyuZipcd + "]");
+			logger.debug("  todohukenName=[" + todohukenName + "]");
+			logger.debug("  shikugunchosonName=[" + shikugunchosonName + "]");
+			logger.debug("  ohazatsushoName=[" + ohazatsushoName + "]");
+			logger.debug("  azachomeName=[" + azachomeName + "]");
+			logger.debug("  insertDatetime=[" + insertDatetime + "]");
+			logger.debug("  createUserId=[" + createUserId + "]");
 			
 			searchAddressDtoList.add(this.address4PostCodeReplyToSearchAddressDto(address));
 			
@@ -75,7 +78,7 @@ public class AddressService implements AddressInterface{
 
 		res.put("result", searchAddressDtoList);
 
-		System.out.println("serch end");
+		logger.info("serch end");
 		return res;
 	}
     

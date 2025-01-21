@@ -12,8 +12,8 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * カウントサービス。
@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class CountService {
 	/** Log */
-	private Log log = LogFactory.getLog(getClass());
+	private final Logger logger = LogManager.getLogger(CountService.class);
 
 	/** カウントファイル名。 */
 	private String countFileName = null;
@@ -45,7 +45,7 @@ public class CountService {
 			String lastLine = "0";
 			String buf = null;
 			while ((buf = br.readLine()) != null) {
-				log.info("buf=" + buf);
+				logger.info("buf=" + buf);
 				lastLine = buf;
 			}
 
@@ -141,16 +141,16 @@ public class CountService {
 			try {
 				// カウンターファイルから現在のカウントを取得する。
 				int count = this.readCount(this.countFileName);
-				log.info("count=" + count);
+				logger.info("count=" + count);
 
 				// カウントアップしたカウントを取得する。
 				newCount = String.format(format, ++count);
-				log.info("newCount=" + newCount);
+				logger.info("newCount=" + newCount);
 
 				if (newCount.length() > size) {
 					// 桁数を超えた場合は、1から振りなおし。
 					newCount = String.format(format, 1);
-					log.info("桁数オーバーのため初期値の1で値を生成する。");
+					logger.info("桁数オーバーのため初期値の1で値を生成する。");
 				}
 
 				// カウンターファイルにカウントを書き込む。
@@ -198,16 +198,16 @@ public class CountService {
 				try {
 					// カウンターファイルから現在のカウントを取得する。
 					int count = this.readCount(this.countFileName);
-					log.info("count=" + count);
+					logger.info("count=" + count);
 
 					// カウントアップしたカウントを取得する。
 					newCount = String.format(format, ++count);
-					log.info("newCount=" + newCount);
+					logger.info("newCount=" + newCount);
 
 					if (newCount.length() > size) {
 						// 桁数を超えた場合は、1から振りなおし。
 						newCount = String.format(format, 1);
-						log.info("桁数オーバーのため初期値の1で値を生成する。");
+						logger.info("桁数オーバーのため初期値の1で値を生成する。");
 					}
 
 					// カウンターファイルにカウントを書き込む。

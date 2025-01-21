@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -28,7 +28,7 @@ import webform.ms.grpc.external_system.ExternalSystemInfoGrpc.ExternalSystemInfo
  */
 public class ExternalsysteminfoService {
 	/** Log */
-	private static final Log log = LogFactory.getLog(ExternalsysteminfoService.class);
+	private final Logger logger = LogManager.getLogger(ExternalsysteminfoService.class);
 
 	/**
 	 * コンストラクタ
@@ -46,7 +46,7 @@ public class ExternalsysteminfoService {
 	 * @return String 画面表示用エラーメッセージ文言
 	 */
 	public String isSystemAvailable(int[] externalSystemIds) {
-		log.info("isSystemAvailable Start.");
+		logger.info("isSystemAvailable Start.");
 
 		// 0件ならば常に稼働
 		if (externalSystemIds.length == 0) {
@@ -106,7 +106,7 @@ public class ExternalsysteminfoService {
 		message = editMaintenanceMesseage(message, stopDatetime, rebootDatetime);
 
 		for (VExternalSystemInfo info : editedResultList) {
-			log.info(info.getExternalSystemName() + " is down. maintenance time: " + info.getStopDatetime().toString()
+			logger.info(info.getExternalSystemName() + " is down. maintenance time: " + info.getStopDatetime().toString()
 					+ " - " + info.getRebootDatetime().toString());
 		}
 
@@ -120,7 +120,7 @@ public class ExternalsysteminfoService {
 	 * @return list
 	 */
 	private List<VExternalSystemInfo> editDisplayMaintenanceTime(List<VExternalSystemInfo> list) {
-		log.info("editDisplayMaintenanceTime Start");
+		logger.info("editDisplayMaintenanceTime Start");
 		// リストが空ならば何もしない
 		if (list.size() == 0) {
 			return list;
@@ -150,7 +150,7 @@ public class ExternalsysteminfoService {
 	 * @return String
 	 */
 	private String editMaintenanceMesseage(String message, LocalDateTime stopDatetime, LocalDateTime rebootDatetime) {
-		log.info("editMaintenanceMesseage Start");
+		logger.info("editMaintenanceMesseage Start");
 
 		// メンテナンス開始時刻の編集
 		message = message.replace("[0]", stopDatetime.format(DateUtil.format_uuuuMMddEaKmm));

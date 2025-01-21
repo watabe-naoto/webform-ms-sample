@@ -12,14 +12,14 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.groups.Default;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import webform.api.exception.ApiException;
 
 public class BeanValidateUtil {
 	/** Log */
-	private static Log log = LogFactory.getLog(BeanValidateUtil.class);
+	private static final Logger logger = LogManager.getLogger(BeanValidateUtil.class);
 
 	/**
 	 * bean検証
@@ -49,7 +49,7 @@ public class BeanValidateUtil {
 		Validator validator = factory.getValidator();
 		Set<ConstraintViolation<T>> constraintViolations = validator.validate(bean, groups);
 		if (constraintViolations.size() > 0) {
-			log.warn(constraintViolations.stream().collect(messageCollector));
+			logger.warn(constraintViolations.stream().collect(messageCollector));
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", ApiException.CODE.PARAM_ERR.toString());
 			map.put("title", "パラメータエラー");
